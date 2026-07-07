@@ -1,0 +1,21 @@
+{
+  "name": "llm-output-guard",
+  "version": "0.1.0",
+  "description": "Validate and conservatively fix LLM-generated Markdown output.",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "packageManager": "pnpm@11.7.0",
+  "scripts": {
+    "build": "pnpm -r build",
+    "check": "pnpm --filter @llm-output-guard/core build && pnpm -r check",
+    "test": "pnpm -r test",
+    "guard": "tsx --conditions development packages/cli/src/index.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.10",
+    "tsx": "^4.23.0",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.10"
+  }
+}

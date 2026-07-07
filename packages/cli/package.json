@@ -1,0 +1,23 @@
+{
+  "name": "@llm-output-guard/cli",
+  "version": "0.1.0",
+  "description": "Command-line interface for llm-output-guard.",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "guard": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "check": "tsc -p tsconfig.json --noEmit",
+    "guard": "tsx --conditions development src/index.ts",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@llm-output-guard/core": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "^4.23.0",
+    "vitest": "^4.1.10"
+  }
+}
