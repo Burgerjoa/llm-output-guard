@@ -1,6 +1,6 @@
-# Chrome Web Store Listing Draft
+# Chrome Web Store Listing Copy
 
-Use this file when filling out the Chrome Web Store Developer Dashboard.
+Use this file when filling out the Chrome Web Store Developer Dashboard. The main description is written as plain store copy, not as a technical README.
 
 ## Basic Info
 
@@ -49,28 +49,15 @@ English
 ## Detailed Description
 
 ```text
-LLM Output Guard detects broken Markdown code fences in LLM web responses before they confuse users or downstream tools.
+LLM Output Guard helps you catch broken Markdown code blocks in ChatGPT, Claude, and Gemini responses before they become annoying to read or copy.
 
-It watches assistant responses in ChatGPT, Claude, and Gemini. When a response contains a broken or suspicious Markdown code fence, the extension adds a small non-invasive warning badge near the message.
+LLM answers often contain multiple code blocks mixed with explanations. When one Markdown fence is missing or malformed, the explanation can accidentally appear inside a code block, and the next code block can render outside of the intended structure. This extension detects those broken or suspicious Markdown fences and shows a small warning badge near the assistant response.
 
-Click the badge to see:
-- validation warnings with line numbers
-- a conservative fixed Markdown preview
-- a copy button for the fixed Markdown
+Click the badge to inspect what went wrong. LLM Output Guard shows the validation warnings, a conservative fixed Markdown preview, and a button to copy the fixed version. It does not replace or rewrite the original response on the page.
 
-Common issues it detects:
-- unclosed code fences
-- malformed short backtick fences
-- missing language tags
-- explanations accidentally rendered inside code blocks
-- later code blocks appearing outside the intended Markdown structure
+The extension is designed for developers who frequently copy code, JSON, shell commands, or technical notes from LLM web UIs. It focuses on one small but common failure mode: broken Markdown code fences.
 
-Everything runs locally in your browser.
-
-No AI APIs.
-No tracking.
-No page content sent to external servers.
-No modification of the original assistant response.
+Everything runs locally in your browser. The extension does not call AI APIs, does not track you, does not send page content to external servers, and does not collect user data.
 ```
 
 ## Privacy Practices
