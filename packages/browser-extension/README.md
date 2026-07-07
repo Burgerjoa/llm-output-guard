@@ -1,62 +1,64 @@
-# LLM Output Guard 브라우저 확장
+# LLM Output Guard Browser Extension
 
-[English](./README.en.md)
+[한국어](./README.ko.md)
 
-Chrome에서 ChatGPT, Claude, Gemini 응답을 감시하고 Markdown 코드 펜스 문제가 있으면 작은 경고 배지를 표시하는 MVP 확장입니다.
+A Chrome extension that watches ChatGPT, Claude, and Gemini responses and shows a small warning badge when Markdown code fence issues are detected.
 
-모든 검사는 브라우저 안에서 로컬로 실행됩니다. 페이지 내용은 외부 서버로 전송하지 않고, AI API도 호출하지 않습니다.
+All validation runs locally in the browser. Page content is not sent to external servers, and no AI APIs are called.
 
-## 지원 사이트
+![Chrome extension screenshot](../../docs/assets/chrome-extension-screenshot.png)
+
+## Supported Sites
 
 - ChatGPT: `https://chatgpt.com/*`
 - ChatGPT legacy: `https://chat.openai.com/*`
 - Claude: `https://claude.ai/*`
 - Gemini: `https://gemini.google.com/*`
 
-## 동작 방식
+## How It Works
 
-1. content script가 현재 사이트에 맞는 adapter를 선택합니다.
-2. `MutationObserver`로 assistant 응답 영역 변화를 감시합니다.
-3. 응답의 보이는 텍스트를 추출합니다.
-4. `@llm-output-guard/core`의 `validateMarkdownFences`로 검사합니다.
-5. 문제가 있으면 응답 근처에 `Markdown fence issue` 배지를 추가합니다.
-6. 배지를 누르면 경고 목록, 수정된 Markdown 미리보기, 복사 버튼이 있는 패널을 보여줍니다.
+1. The content script selects the adapter for the current site.
+2. A `MutationObserver` watches assistant response changes.
+3. Visible message text is extracted.
+4. `validateMarkdownFences` from `@llm-output-guard/core` validates the text.
+5. If issues exist, a `Markdown fence issue` badge is inserted near the response.
+6. Clicking the badge opens a panel with warnings, a fixed Markdown preview, and a copy button.
 
-## 빌드
+## Build
 
 ```bash
 pnpm install
 pnpm --filter @llm-output-guard/browser-extension build
 ```
 
-빌드 후 content script는 `packages/browser-extension/dist/contentScript.js`에 생성됩니다.
+After building, the content script is available at `packages/browser-extension/dist/contentScript.js`.
 
-## Chrome에 unpacked extension으로 로드하기
+## Load as an Unpacked Chrome Extension
 
-1. Chrome에서 `chrome://extensions`를 엽니다.
-2. 오른쪽 위 `Developer mode`를 켭니다.
-3. `Load unpacked`를 누릅니다.
-4. `packages/browser-extension` 폴더를 선택합니다.
-5. ChatGPT, Claude, Gemini 페이지를 새로고침합니다.
+1. Open `chrome://extensions` in Chrome.
+2. Enable `Developer mode`.
+3. Click `Load unpacked`.
+4. Select the `packages/browser-extension` folder.
+5. Refresh ChatGPT, Claude, or Gemini.
 
-## 수동 테스트
+## Manual Test
 
-1. ChatGPT를 엽니다.
-2. 의도적으로 닫히지 않은 Markdown 코드 펜스를 만들도록 요청합니다.
-3. assistant 응답 근처에 `Markdown fence issue` 배지가 나타나는지 확인합니다.
-4. 배지를 클릭합니다.
-5. 수정 미리보기 패널이 열리는지 확인합니다.
-6. `Copy fixed Markdown` 버튼으로 수정된 Markdown이 복사되는지 확인합니다.
+1. Open ChatGPT.
+2. Ask it to intentionally produce a broken Markdown code fence.
+3. Confirm the `Markdown fence issue` badge appears near the assistant response.
+4. Click the badge.
+5. Confirm the fixed preview panel appears.
+6. Click `Copy fixed Markdown`.
 
-## 개인정보
+## Privacy
 
-- 페이지 콘텐츠를 외부 서버로 보내지 않습니다.
-- AI API를 호출하지 않습니다.
-- 네트워크 권한을 요청하지 않습니다.
-- 원본 assistant 응답 DOM을 교체하지 않습니다.
+- No page content is sent to external servers.
+- No AI APIs are called.
+- No network permissions are requested.
+- Original assistant response DOM is not replaced.
 
-## 현재 한계
+## Current Limitations
 
-- LLM 사이트의 DOM 구조가 바뀌면 selector가 깨질 수 있습니다.
-- 원본 메시지는 수정하지 않고 별도 미리보기만 제공합니다.
-- 수정 미리보기가 렌더링된 Markdown의 시각적 포맷을 완벽히 보존하지는 않습니다.
+- LLM site DOM changes may break selectors.
+- The original message is not modified.
+- The fixed preview may not perfectly preserve rendered formatting.

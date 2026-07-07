@@ -1,92 +1,87 @@
-# llm-output-guard
+# LLM Output Guard
 
-[English](./README.en.md)
+LLM Output Guard detects and fixes broken Markdown code fences in ChatGPT, Claude, Gemini, and MCP-based coding agents.
 
-LLM이 만든 Markdown을 사용자에게 보여주거나 파일에 적용하기 전에 구조적으로 검사하는 작은 TypeScript 도구 모음입니다.
+[한국어 README](./README.ko.md)
 
-첫 MVP는 Markdown 코드 펜스에 집중합니다. 닫히지 않은 코드 블록, 짧거나 잘못된 백틱 펜스, 언어 태그 누락, 수상한 중첩 펜스를 빠르게 잡아냅니다.
+![LLM Output Guard demo](./docs/assets/demo.gif)
 
-## 왜 필요한가
+## Why
 
-LLM 코딩 에이전트는 설명, 코드, 셸 명령, JSON, diff, 후속 안내를 Markdown 하나에 섞어서 출력합니다. 이때 코드 블록 닫는 펜스 하나가 빠지면 나머지 응답 전체가 코드 블록 안으로 빨려 들어갈 수 있습니다.
+I got tired of LLMs breaking their own Markdown code fences, so I built a guard for it.
 
-그 결과 사용자는 깨진 응답을 보게 되고, 도구는 잘못된 범위를 파싱할 수 있으며, 자동화된 에이전트는 망가진 Markdown을 파일에 적용할 수 있습니다.
+Even LLMs explaining Markdown fences can break Markdown fences. A single missing closing fence can swallow the rest of a response into a code block, confuse users, and break downstream tools.
 
-`llm-output-guard`는 에이전트가 말하거나 쓰기 전에 실행하는 가벼운 preflight check입니다.
+LLM Output Guard catches those structural Markdown failures before the output reaches a user, a file, a pull request, or another agent.
 
-## 제공 기능
+## What It Catches
 
-- 작은 line-based state machine으로 fenced code block 검사
-- line, column, type, message, severity가 포함된 구조화 경고 반환
-- 닫히지 않은 코드 펜스는 마지막에 닫는 펜스를 추가하는 보수적 수정
-- MCP 서버로 IDE/agent workflow에 연결
-- CLI로 로컬 Markdown 파일 검사
-- Chrome 확장으로 ChatGPT, Claude, Gemini 웹 UI에서 응답 검사
+- unclosed code fences
+- malformed short backtick fences
+- missing language tags
+- suspicious nested fences inside open code blocks
+- explanations accidentally rendered inside code blocks
 
-## 아키텍처
+Everything runs locally. No AI APIs, no tracking, no code execution.
 
-```text
-packages/core
-  Shared Markdown fence validator and fixer
+## Before / After
 
-packages/cli
-  Local file checker
+Before:
 
-packages/mcp-server
-  MCP tools for IDE agents
+<pre><code>Here is the TypeScript example:
 
-packages/browser-extension
-  Chrome extension for ChatGPT, Claude, and Gemini web UIs
+&#96;&#96;&#96;ts
+export function hello(name: string) {
+  return `hello ${name}`;
+}
+
+This explanation is accidentally inside the code block.</code></pre>
+
+After:
+
+<pre><code>Here is the TypeScript example:
+
+&#96;&#96;&#96;ts
+export function hello(name: string) {
+  return `hello ${name}`;
+}
+&#96;&#96;&#96;
+
+This explanation is outside the code block again.</code></pre>
+
+## Chrome Extension
+
+The Chrome extension watches assistant responses in ChatGPT, Claude, and Gemini. When it finds broken or suspicious Markdown fences, it adds a small warning badge. Clicking the badge opens a fixed Markdown preview with warnings and a copy button.
+
+![Chrome extension screenshot](./docs/assets/chrome-extension-screenshot.png)
+
+Build and load it locally:
+
+```bash
+pnpm install
+pnpm --filter @llm-output-guard/browser-extension build
 ```
 
-## 패키지
+Then open `chrome://extensions`, enable `Developer mode`, click `Load unpacked`, and select `packages/browser-extension`.
 
-| 패키지 | 역할 |
-| --- | --- |
-| `@llm-output-guard/core` | 재사용 가능한 validator와 보수적 fixer |
-| `@llm-output-guard/cli` | 로컬 파일 검사 CLI |
-| `@llm-output-guard/mcp-server` | agent 통합용 MCP stdio 서버 |
-| `@llm-output-guard/browser-extension` | ChatGPT, Claude, Gemini용 Chrome 확장 |
+Supported sites:
 
-## 설치
+- `https://chatgpt.com/*`
+- `https://chat.openai.com/*`
+- `https://claude.ai/*`
+- `https://gemini.google.com/*`
+
+## MCP Server
+
+Use the MCP server when you want coding agents to validate their Markdown before showing it to users or applying it to files.
 
 ```bash
 pnpm install
 pnpm build
-```
-
-## CLI
-
-Markdown 파일 검사:
-
-```bash
-pnpm guard check ./example.md
-```
-
-수정 결과를 stdout으로 출력:
-
-```bash
-pnpm guard fix ./example.md
-```
-
-파일에 직접 적용:
-
-```bash
-pnpm guard fix ./example.md --write
-```
-
-`check`는 error-level warning이 있으면 non-zero status로 종료합니다.
-
-## MCP 서버
-
-stdio 기반 MCP 서버 실행:
-
-```bash
-pnpm build
 pnpm --filter @llm-output-guard/mcp-server start
 ```
 
-MCP client 설정 예시:
+Example MCP client config:
 
 ```json
 {
@@ -105,46 +100,71 @@ MCP client 설정 예시:
 }
 ```
 
-제공 도구:
+Tools:
 
-- `validate_markdown_output`: LLM Markdown 출력의 코드 펜스 문제를 검사합니다.
-- `fix_markdown_output`: 안전한 범위에서 닫히지 않은 코드 펜스를 보수적으로 수정합니다.
+- `validate_markdown_output`: validate Markdown output and return warnings plus stats
+- `fix_markdown_output`: conservatively append a missing closing fence and return remaining warnings
 
-## 브라우저 확장
+## CLI
 
-Chrome 확장은 ChatGPT, Claude, Gemini 응답을 페이지 안에서 로컬로 검사합니다. 문제가 있으면 assistant 응답 근처에 작은 경고 배지를 보여주고, 클릭하면 수정된 Markdown 미리보기와 복사 버튼을 제공합니다.
+Check a Markdown file:
 
 ```bash
-pnpm --filter @llm-output-guard/browser-extension build
+pnpm guard check ./example.md
 ```
 
-Chrome에서 `chrome://extensions`를 열고 `Developer mode`를 켠 뒤 `packages/browser-extension` 폴더를 `Load unpacked`로 불러오면 됩니다.
+Print a fixed version:
 
-자세한 내용은 [browser extension README](./packages/browser-extension/README.md)를 참고하세요.
+```bash
+pnpm guard fix ./example.md
+```
 
-## Core API
+Write the fix back to the file:
+
+```bash
+pnpm guard fix ./example.md --write
+```
+
+## TypeScript Library
 
 ~~~ts
 import { fixMarkdownFences, validateMarkdownFences } from "@llm-output-guard/core";
 
-const result = validateMarkdownFences("```ts\nconst value = 1;");
+const text = "```ts\nconst value = 1;";
+const result = validateMarkdownFences(text);
 
 if (!result.ok) {
-  const fix = fixMarkdownFences("```ts\nconst value = 1;");
+  const fix = fixMarkdownFences(text);
   console.log(fix.fixedText);
 }
 ~~~
 
+## Architecture
+
+```text
+packages/core
+  Shared Markdown fence validator and fixer
+
+packages/cli
+  Local file checker
+
+packages/mcp-server
+  MCP tools for IDE agents
+
+packages/browser-extension
+  Chrome extension for ChatGPT, Claude, and Gemini web UIs
+```
+
 ## Warning Types
 
-| Type | Severity | 의미 |
+| Type | Severity | Meaning |
 | --- | --- | --- |
-| `UNCLOSED_FENCE` | `error` | 코드 블록이 열렸지만 EOF 전에 닫히지 않음 |
-| `MALFORMED_FENCE` | `warning` | 한두 개 백틱 라인이 fence 의도처럼 보임 |
-| `MISSING_LANGUAGE` | `warning` | opening fence에 language tag가 없음 |
-| `SUSPICIOUS_NESTED_FENCE` | `warning` | 열린 코드 블록 안에서 닫는 fence가 아닌 triple backtick 발견 |
+| `UNCLOSED_FENCE` | `error` | A code block was opened but not closed before EOF |
+| `MALFORMED_FENCE` | `warning` | A one- or two-backtick line looks like an intended fence |
+| `MISSING_LANGUAGE` | `warning` | An opening fence has no language tag |
+| `SUSPICIOUS_NESTED_FENCE` | `warning` | Triple backticks appeared inside an open block without forming a valid close |
 
-## 개발
+## Development
 
 ```bash
 pnpm install
@@ -153,34 +173,24 @@ pnpm check
 pnpm build
 ```
 
-## 수동 테스트 예시
+## Manual Extension Test
 
-브라우저 확장:
+1. Run `pnpm --filter @llm-output-guard/browser-extension build`.
+2. Load `packages/browser-extension` as an unpacked Chrome extension.
+3. Open ChatGPT.
+4. Ask it to produce intentionally broken Markdown fence output.
+5. Confirm the `Markdown fence issue` badge appears.
+6. Click the badge and confirm the fixed preview panel appears.
+7. Click `Copy fixed Markdown`.
 
-1. `pnpm --filter @llm-output-guard/browser-extension build`
-2. Chrome에서 `packages/browser-extension`를 unpacked extension으로 로드
-3. ChatGPT를 열고 의도적으로 닫히지 않은 Markdown 코드 펜스를 출력하게 요청
-4. `Markdown fence issue` 배지가 나타나는지 확인
-5. 배지를 클릭해 수정 미리보기 패널 확인
-6. `Copy fixed Markdown` 버튼 확인
-
-## 설계 원칙
-
-- parser는 단순하고 예측 가능하게 유지
-- Markdown 렌더링보다 구조 검사에 집중
-- 코드 블록을 실행하지 않음
-- AI API를 호출하지 않음
-- 안전한 수정만 수행
-- agent가 읽기 쉬운 machine-readable output 제공
-
-## 로드맵
+## Roadmap
 
 - JSON block validation
 - XML/HTML tag validation
 - VS Code extension
 - GitHub Actions integration
-- Streaming validation for partial LLM responses
+- streaming validation for partial LLM responses
 
-## 라이선스
+## License
 
 MIT
