@@ -31,23 +31,34 @@ Before:
 <pre><code>Here is the TypeScript example:
 
 &#96;&#96;&#96;ts
-export function hello(name: string) {
-  return `hello ${name}`;
+export function parseFence(input: string) {
+  return input.trim();
 }
 
-This explanation is accidentally inside the code block.</code></pre>
+Explanation: this should be normal text.
+
+&#96;&#96;&#96;json
+{ "ok": true }
+&#96;&#96;&#96;
+
+But the explanation got swallowed by the first code block,
+and the JSON block may render in the wrong place.</code></pre>
 
 After:
 
 <pre><code>Here is the TypeScript example:
 
 &#96;&#96;&#96;ts
-export function hello(name: string) {
-  return `hello ${name}`;
+export function parseFence(input: string) {
+  return input.trim();
 }
 &#96;&#96;&#96;
 
-This explanation is outside the code block again.</code></pre>
+Explanation: this is normal text again.
+
+&#96;&#96;&#96;json
+{ "ok": true }
+&#96;&#96;&#96;</code></pre>
 
 ## Chrome Extension
 
