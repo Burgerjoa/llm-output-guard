@@ -75,6 +75,15 @@ pnpm --filter @llm-output-guard/browser-extension build
 
 Chrome에서 `chrome://extensions`를 열고 `Developer mode`를 켠 다음 `Load unpacked`로 `packages/browser-extension` 폴더를 선택하면 됩니다.
 
+Chrome Web Store 업로드 ZIP 생성:
+
+```bash
+pnpm --filter @llm-output-guard/browser-extension package
+```
+
+업로드 파일은 `packages/browser-extension/release/llm-output-guard-chrome-0.1.0.zip`에 생성됩니다.
+스토어 문구와 개인정보 문구는 [docs/chrome-web-store/listing.md](./docs/chrome-web-store/listing.md)에 정리되어 있습니다.
+
 지원 사이트:
 
 - `https://chatgpt.com/*`

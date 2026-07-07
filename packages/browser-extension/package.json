@@ -8,6 +8,7 @@
   "scripts": {
     "build": "tsup src/contentScript.ts --format iife --global-name LlmOutputGuard --out-dir dist --platform browser --clean && node scripts/finalizeBuild.mjs",
     "dev": "tsup src/contentScript.ts --format iife --global-name LlmOutputGuard --out-dir dist --platform browser --watch --onSuccess \"node scripts/finalizeBuild.mjs\"",
+    "package": "pnpm build && node scripts/packageExtension.mjs",
     "check": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run --passWithNoTests"
   },
@@ -15,6 +16,7 @@
     "@llm-output-guard/core": "workspace:*"
   },
   "devDependencies": {
+    "archiver": "^8.0.0",
     "tsup": "^8.5.1",
     "vitest": "^4.1.10"
   }

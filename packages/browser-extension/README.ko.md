@@ -33,6 +33,20 @@ pnpm --filter @llm-output-guard/browser-extension build
 
 빌드 후 content script는 `packages/browser-extension/dist/contentScript.js`에 생성됩니다.
 
+## Chrome Web Store 제출 패키지
+
+```bash
+pnpm --filter @llm-output-guard/browser-extension package
+```
+
+다음 ZIP이 생성됩니다.
+
+```text
+packages/browser-extension/release/llm-output-guard-chrome-0.1.0.zip
+```
+
+이 ZIP을 Chrome Web Store Developer Dashboard에 업로드하면 됩니다.
+
 ## Chrome에 unpacked extension으로 로드하기
 
 1. Chrome에서 `chrome://extensions`를 엽니다.

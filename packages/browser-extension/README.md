@@ -33,6 +33,20 @@ pnpm --filter @llm-output-guard/browser-extension build
 
 After building, the content script is available at `packages/browser-extension/dist/contentScript.js`.
 
+## Package for Chrome Web Store
+
+```bash
+pnpm --filter @llm-output-guard/browser-extension package
+```
+
+This creates:
+
+```text
+packages/browser-extension/release/llm-output-guard-chrome-0.1.0.zip
+```
+
+Upload that ZIP in the Chrome Web Store Developer Dashboard.
+
 ## Load as an Unpacked Chrome Extension
 
 1. Open `chrome://extensions` in Chrome.

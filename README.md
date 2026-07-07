@@ -75,6 +75,15 @@ pnpm --filter @llm-output-guard/browser-extension build
 
 Then open `chrome://extensions`, enable `Developer mode`, click `Load unpacked`, and select `packages/browser-extension`.
 
+Prepare the Chrome Web Store upload package:
+
+```bash
+pnpm --filter @llm-output-guard/browser-extension package
+```
+
+The upload ZIP is created at `packages/browser-extension/release/llm-output-guard-chrome-0.1.0.zip`.
+Store listing copy and privacy text live in [docs/chrome-web-store/listing.md](./docs/chrome-web-store/listing.md).
+
 Supported sites:
 
 - `https://chatgpt.com/*`
