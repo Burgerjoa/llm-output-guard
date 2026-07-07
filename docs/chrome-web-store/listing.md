@@ -48,16 +48,12 @@ English
 
 ## Detailed Description
 
+Chrome Web Store description fields are plain text, not Markdown.
+
+Copy the plain-text description from:
+
 ```text
-LLM Output Guard helps you catch broken Markdown code blocks in ChatGPT, Claude, and Gemini responses before they become annoying to read or copy.
-
-LLM answers often contain multiple code blocks mixed with explanations. When one Markdown fence is missing or malformed, the explanation can accidentally appear inside a code block, and the next code block can render outside of the intended structure. This extension detects those broken or suspicious Markdown fences and shows a small warning badge near the assistant response.
-
-Click the badge to inspect what went wrong. LLM Output Guard shows the validation warnings, a conservative fixed Markdown preview, and a button to copy the fixed version. It does not replace or rewrite the original response on the page.
-
-The extension is designed for developers who frequently copy code, JSON, shell commands, or technical notes from LLM web UIs. It focuses on one small but common failure mode: broken Markdown code fences.
-
-Everything runs locally in your browser. The extension does not call AI APIs, does not track you, does not send page content to external servers, and does not collect user data.
+docs/chrome-web-store/description.txt
 ```
 
 ## Privacy Practices
