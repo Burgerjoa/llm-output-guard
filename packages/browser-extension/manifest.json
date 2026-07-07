@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "LLM Output Guard",
+  "description": "Detects and fixes broken Markdown code fences in LLM web responses.",
+  "version": "0.1.0",
+  "content_scripts": [
+    {
+      "matches": [
+        "https://chatgpt.com/*",
+        "https://chat.openai.com/*",
+        "https://claude.ai/*",
+        "https://gemini.google.com/*"
+      ],
+      "js": [
+        "dist/contentScript.js"
+      ],
+      "css": [
+        "src/ui/styles.css"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "permissions": []
+}
