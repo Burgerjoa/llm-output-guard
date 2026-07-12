@@ -28,6 +28,12 @@ Homepage URL:
 https://github.com/Burgerjoa/llm-output-guard
 ```
 
+Chrome Web Store URL:
+
+```text
+https://chromewebstore.google.com/detail/llm-output-guard/cbakgacfpfmggigkeoflpokiceiklgaf
+```
+
 Support URL:
 
 ```text

@@ -4,6 +4,8 @@ LLM Output Guard detects and fixes broken Markdown code fences in ChatGPT, Claud
 
 [한국어 README](./README.ko.md)
 
+[Install from Chrome Web Store](https://chromewebstore.google.com/detail/llm-output-guard/cbakgacfpfmggigkeoflpokiceiklgaf)
+
 ![LLM Output Guard demo](./docs/assets/demo.gif)
 
 ## Why
@@ -66,23 +68,7 @@ The Chrome extension watches assistant responses in ChatGPT, Claude, and Gemini.
 
 ![Chrome extension screenshot](./docs/assets/chrome-extension-screenshot.png)
 
-Build and load it locally:
-
-```bash
-pnpm install
-pnpm --filter @llm-output-guard/browser-extension build
-```
-
-Then open `chrome://extensions`, enable `Developer mode`, click `Load unpacked`, and select `packages/browser-extension`.
-
-Prepare the Chrome Web Store upload package:
-
-```bash
-pnpm --filter @llm-output-guard/browser-extension package
-```
-
-The upload ZIP is created at `packages/browser-extension/release/llm-output-guard-chrome-0.1.0.zip`.
-Store listing copy and privacy text live in [docs/chrome-web-store/listing.md](./docs/chrome-web-store/listing.md).
+[Install LLM Output Guard from the Chrome Web Store](https://chromewebstore.google.com/detail/llm-output-guard/cbakgacfpfmggigkeoflpokiceiklgaf)
 
 Supported sites:
 
@@ -195,13 +181,12 @@ pnpm build
 
 ## Manual Extension Test
 
-1. Run `pnpm --filter @llm-output-guard/browser-extension build`.
-2. Load `packages/browser-extension` as an unpacked Chrome extension.
-3. Open ChatGPT.
-4. Ask it to produce intentionally broken Markdown fence output.
-5. Confirm the `Markdown fence issue` badge appears.
-6. Click the badge and confirm the fixed preview panel appears.
-7. Click `Copy fixed Markdown`.
+1. Install the extension from the [Chrome Web Store](https://chromewebstore.google.com/detail/llm-output-guard/cbakgacfpfmggigkeoflpokiceiklgaf).
+2. Open ChatGPT.
+3. Ask it to produce intentionally broken Markdown fence output.
+4. Confirm the `Markdown fence issue` badge appears.
+5. Click the badge and confirm the fixed preview panel appears.
+6. Click `Copy fixed Markdown`.
 
 ## Roadmap
 

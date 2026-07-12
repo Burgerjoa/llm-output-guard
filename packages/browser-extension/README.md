@@ -8,6 +8,10 @@ All validation runs locally in the browser. Page content is not sent to external
 
 ![Chrome extension screenshot](../../docs/assets/chrome-extension-screenshot.png)
 
+## Install
+
+[Install from the Chrome Web Store](https://chromewebstore.google.com/detail/llm-output-guard/cbakgacfpfmggigkeoflpokiceiklgaf)
+
 ## Supported Sites
 
 - ChatGPT: `https://chatgpt.com/*`
@@ -24,7 +28,7 @@ All validation runs locally in the browser. Page content is not sent to external
 5. If issues exist, a `Markdown fence issue` badge is inserted near the response.
 6. Clicking the badge opens a panel with warnings, a fixed Markdown preview, and a copy button.
 
-## Build
+## Development Build
 
 ```bash
 pnpm install
@@ -33,7 +37,7 @@ pnpm --filter @llm-output-guard/browser-extension build
 
 After building, the content script is available at `packages/browser-extension/dist/contentScript.js`.
 
-## Package for Chrome Web Store
+## Package for Chrome Web Store Submission
 
 ```bash
 pnpm --filter @llm-output-guard/browser-extension package
@@ -57,12 +61,13 @@ Upload that ZIP in the Chrome Web Store Developer Dashboard.
 
 ## Manual Test
 
-1. Open ChatGPT.
-2. Ask it to intentionally produce a broken Markdown code fence.
-3. Confirm the `Markdown fence issue` badge appears near the assistant response.
-4. Click the badge.
-5. Confirm the fixed preview panel appears.
-6. Click `Copy fixed Markdown`.
+1. Install the extension from the Chrome Web Store.
+2. Open ChatGPT.
+3. Ask it to intentionally produce a broken Markdown code fence.
+4. Confirm the `Markdown fence issue` badge appears near the assistant response.
+5. Click the badge.
+6. Confirm the fixed preview panel appears.
+7. Click `Copy fixed Markdown`.
 
 ## Privacy
 
